@@ -40,6 +40,73 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       photos: [],
       videos: ['video1.mp4'],
     ),
+    // اضافه کردن گزارش‌های نمونه در خصوص مسائل فرهنگی
+    Report(
+      id: '3',
+      title: 'فعالیت‌های فرهنگی در محله قدیمی',
+      description: 'گزارش برگزاری مراسم سنتی نوروز در محله قدیمی شهر، با شرکت بیش از ۲۰۰ نفر از ساکنان محلی. فعالیت‌های شامل رقص محلی، موسیقی سنتی و توزیع شیرینی بود.',
+      category: 'فرهنگی',
+      region: 'جنوب',
+      tags: ['نوروز', 'سنت', 'محلی'],
+      date: DateTime.now().subtract(const Duration(days: 0)),
+      status: 'تایید شده',
+      photos: ['photo2.jpg', 'photo3.jpg'],
+      videos: ['video2.mp4'],
+      rating: 4.8,
+      feedback: 'گزارش بسیار کاملی از فعالیت‌های فرهنگی ارائه شده و تاثیرات مثبت اجتماعی آن برجسته شده.',
+    ),
+    Report(
+      id: '4',
+      title: 'مشکلات حفظ میراث فرهنگی',
+      description: 'گزارش در مورد تخریب بخشی از بافت تاریخی شهر به دلیل ساخت و ساز غیرمجاز. پیشنهاد بازسازی و حفاظت از بناهای قدیمی ارائه شده.',
+      category: 'فرهنگی',
+      region: 'مرکزی',
+      tags: ['میراث فرهنگی', 'تخریب', 'بازسازی'],
+      date: DateTime.now().subtract(const Duration(days: 1)),
+      status: 'در حال بررسی',
+      photos: ['photo4.jpg'],
+      videos: [],
+    ),
+    Report(
+      id: '5',
+      title: 'برگزاری کلاس‌های آموزش زبان محلی',
+      description: 'گزارش از برگزاری کلاس‌های هفتگی آموزش زبان و ادبیات پارسی به جوانان منطقه. بیش از ۵۰ شرکت‌کننده و تاثیر مثبت بر هویت فرهنگی.',
+      category: 'فرهنگی',
+      region: 'شمال',
+      tags: ['آموزش', 'زبان پارسی', 'هویت فرهنگی'],
+      date: DateTime.now().subtract(const Duration(days: 0)),
+      status: 'تایید شده',
+      photos: [],
+      videos: ['video3.mp4', 'video4.mp4'],
+      rating: 4.6,
+      feedback: 'ابتکار خوبی برای حفظ زبان و فرهنگ محلی. پیشنهاد گسترش به مناطق دیگر.',
+    ),
+    Report(
+      id: '6',
+      title: 'جشنواره غذاهای سنتی',
+      description: 'گزارش از جشنواره غذاهای سنتی برگزار شده در پارک مرکزی با حضور آشپزهای محلی. معرفی بیش از ۲۰ نوع غذا سنتی و آموزش تهیه آنها.',
+      category: 'فرهنگی',
+      region: 'مرکزی',
+      tags: ['غذاهای سنتی', 'آموزش', 'جشنواره'],
+      date: DateTime.now().subtract(const Duration(days: 2)),
+      status: 'تایید شده',
+      photos: ['photo5.jpg', 'photo6.jpg', 'photo7.jpg'],
+      videos: ['video5.mp4'],
+      rating: 4.9,
+      feedback: 'رویداد بسیار موفق که فرهنگ غذایی محلی را زنده نگه داشته.',
+    ),
+    Report(
+      id: '7',
+      title: 'مشکلات اجرای برنامه‌های فرهنگی در مدارس',
+      description: 'گزارش در مورد کمبود بودجه و تجهیزات برای اجرای برنامه‌های فرهنگی در مدارس منطقه جنوبی. پیشنهاد تخصیص بودجه اضافی.',
+      category: 'فرهنگی',
+      region: 'جنوب',
+      tags: ['آموزش', 'بودجه', 'مدارس'],
+      date: DateTime.now().subtract(const Duration(days: 3)),
+      status: 'در حال بررسی',
+      photos: ['photo8.jpg'],
+      videos: [],
+    ),
   ];
 
   String _selectedDateFilter = 'همه';
@@ -56,6 +123,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       return true;
     }).toList();
   }
+
+  // محاسبه آمار بر اساس گزارش‌ها
+  int get _todayReportsCount => _reports.where((r) => r.date.day == DateTime.now().day && r.date.month == DateTime.now().month && r.date.year == DateTime.now().year).length;
+  double get _averageRating => _reports.where((r) => r.rating != null).map((r) => r.rating!).reduce((a, b) => a + b) / _reports.where((r) => r.rating != null).length;
+  String get _bestExpert => 'احمد رضایی'; // ثابت برای نمونه
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +180,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 ),
                 DropdownButton<String>(
                   value: _selectedCategoryFilter,
-                  items: ['همه', 'روزانه', 'مشکلات', 'پیشنهاد']
+                  items: ['همه', 'روزانه', 'مشکلات', 'فرهنگی', 'پیشنهاد']
                       .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                       .toList(),
                   onChanged: (value) => setState(() => _selectedCategoryFilter = value!),
@@ -155,7 +227,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             child: Column(
                               children: [
                                 Text('تعداد گزارش‌های امروز', style: Theme.of(context).textTheme.titleMedium),
-                                const Text('5', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                                Text('$_todayReportsCount', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -169,7 +241,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             child: Column(
                               children: [
                                 Text('بهترین کارشناس هفته', style: Theme.of(context).textTheme.titleMedium),
-                                const Text('احمد رضایی', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                Text(_bestExpert, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -183,7 +255,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             child: Column(
                               children: [
                                 Text('میانگین امتیاز گزارش‌ها', style: Theme.of(context).textTheme.titleMedium),
-                                const Text('4.2', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                                Text(_averageRating.toStringAsFixed(1), style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -209,17 +281,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                     PieChartData(
                                       sections: [
                                         PieChartSectionData(
-                                          value: 40,
+                                          value: _reports.where((r) => r.category == 'روزانه').length.toDouble(),
                                           title: 'روزانه',
                                           color: Colors.blue,
                                         ),
                                         PieChartSectionData(
-                                          value: 30,
+                                          value: _reports.where((r) => r.category == 'مشکلات').length.toDouble(),
                                           title: 'مشکلات',
                                           color: Colors.red,
                                         ),
                                         PieChartSectionData(
-                                          value: 30,
+                                          value: _reports.where((r) => r.category == 'فرهنگی').length.toDouble(),
+                                          title: 'فرهنگی',
+                                          color: const Color(0xFFC9A227), // Gold color
+                                        ),
+                                        PieChartSectionData(
+                                          value: _reports.where((r) => r.category == 'پیشنهاد').length.toDouble(),
                                           title: 'پیشنهاد',
                                           color: Colors.green,
                                         ),
@@ -246,10 +323,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   child: BarChart(
                                     BarChartData(
                                       barGroups: [
-                                        BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: 5)]),
-                                        BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: 3)]),
-                                        BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: 8)]),
-                                        BarChartGroupData(x: 4, barRods: [BarChartRodData(toY: 6)]),
+                                        BarChartGroupData(x: 1, barRods: [BarChartRodData(toY: _reports.where((r) => r.date.day == DateTime.now().subtract(const Duration(days: 6)).day).length.toDouble())]),
+                                        BarChartGroupData(x: 2, barRods: [BarChartRodData(toY: _reports.where((r) => r.date.day == DateTime.now().subtract(const Duration(days: 5)).day).length.toDouble())]),
+                                        BarChartGroupData(x: 3, barRods: [BarChartRodData(toY: _reports.where((r) => r.date.day == DateTime.now().subtract(const Duration(days: 4)).day).length.toDouble())]),
+                                        BarChartGroupData(x: 4, barRods: [BarChartRodData(toY: _reports.where((r) => r.date.day == DateTime.now().subtract(const Duration(days: 3)).day).length.toDouble())]),
+                                        BarChartGroupData(x: 5, barRods: [BarChartRodData(toY: _reports.where((r) => r.date.day == DateTime.now().subtract(const Duration(days: 2)).day).length.toDouble())]),
+                                        BarChartGroupData(x: 6, barRods: [BarChartRodData(toY: _reports.where((r) => r.date.day == DateTime.now().subtract(const Duration(days: 1)).day).length.toDouble())]),
+                                        BarChartGroupData(x: 7, barRods: [BarChartRodData(toY: _todayReportsCount.toDouble())]),
                                       ],
                                     ),
                                   ),
