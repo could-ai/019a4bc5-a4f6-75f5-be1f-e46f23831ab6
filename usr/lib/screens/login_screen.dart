@@ -14,6 +14,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isRegistering = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Pre-fill with admin credentials for quick testing
+    _emailController.text = 'admin@example.com';
+    _passwordController.text = 'admin123';
+  }
+
   void _submit() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (_isRegistering) {
